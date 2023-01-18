@@ -31,7 +31,7 @@
 			import { ConvexGeometry } from "https://cdn.skypack.dev/three@0.132.2/examples/jsm/geometries/ConvexGeometry.js"
 			import * as BufferGeometryUtils from 'https://cdn.skypack.dev/three@0.132.2/examples/jsm/utils/BufferGeometryUtils.js';
 
-			let group, camera, scene, renderer;
+			let main_coordinate_group, second_coordinate_group, camera, scene, renderer;
 
 			init();
 			animate();
@@ -45,10 +45,14 @@
 				renderer.setSize( window.innerWidth, window.innerHeight );
 				document.body.appendChild( renderer.domElement );
 
+				// THREE.Object3D.DefaultUp = new THREE.Vector3(0,0,1);
+
 				// camera
 
 				camera = new THREE.PerspectiveCamera( 40, window.innerWidth / window.innerHeight, 1, 1000 );
-				camera.position.set( 30, 40, 60 );
+				camera.up.set(0, 0, 1)
+				// camera.rotation.x = Math.PI/2;
+				camera.position.set( -60, -30, 40 );
 				scene.add( camera );
 
 				// controls
@@ -59,84 +63,105 @@
 				controls.maxDistance = 500;
 				controls.maxPolarAngle = 2*Math.PI;
 
-
 				// ambient light
-
 				scene.add( new THREE.AmbientLight( 0x222222 ) );
 
 				// point light
-
 				const light = new THREE.PointLight( 0xffffff, 1 );
 				camera.add( light );
 
+				// add coordinate group
+				main_coordinate_group = new THREE.Group();
+				second_coordinate_group = new THREE.Group();
+
+				let axis_length = 20;
+				let axis_radius = 0.1;
+				let axis_head_length = 0.8;
+				let axis_head_width = 0.5;
+
+				let x_axis_color = 0xff0000;
+				let y_axis_color = 0x00ff00;
+				let z_axis_color = 0x0000ff;
+
+				// add x axis 
+				const x_axis_geometry = new THREE.CylinderGeometry( axis_radius, axis_radius, axis_length, 32 );
+				const x_axis_material = new THREE.MeshBasicMaterial( {color: x_axis_color} );
+				const x_axis_cylinder = new THREE.Mesh( x_axis_geometry, x_axis_material );
+				x_axis_cylinder.rotation.z = Math.PI/2;
+				x_axis_cylinder.position.set(0.5*axis_length, 0, 0);
+				main_coordinate_group.add( x_axis_cylinder );
+
+				// const x2_axis_cylinder = x_axis_cylinder.clone();
+				// x2_axis_cylinder = x_axis_cylinder.clone();
+				// x2_axis_cylinder.position.set(10,10,10);
+				// x2_axis_cylinder.material.color.set(0x00ffff);
+				// second_coordinate_group.add( x2_axis_cylinder );
+
+				// add arrow in x axis end
+				const x_axis_arrow_dir = new THREE.Vector3( 1, 0, 0 );
+				x_axis_arrow_dir.normalize();
+				const x_axis_arrow_origin = new THREE.Vector3( axis_length, 0, 0 );
+				const x_axis_arrowHelper = new THREE.ArrowHelper( 	x_axis_arrow_dir, x_axis_arrow_origin, 
+																	axis_head_length, x_axis_color, 
+																	axis_head_length, axis_head_width);
+				main_coordinate_group.add( x_axis_arrowHelper );
+
+				// add y axis 
+				const y_axis_geometry = new THREE.CylinderGeometry( axis_radius, axis_radius, axis_length, 32 );
+				const y_axis_material = new THREE.MeshBasicMaterial( {color: 0x00ff00} );
+				const y_axis_cylinder = new THREE.Mesh( y_axis_geometry, y_axis_material );
+				y_axis_cylinder.position.set(0, 0.5*axis_length, 0);
+				main_coordinate_group.add( y_axis_cylinder );
+
+				// add arrow in y axis end
+				const y_axis_arrow_dir = new THREE.Vector3( 0, 1, 0 );
+				y_axis_arrow_dir.normalize();
+				const y_axis_arrow_origin = new THREE.Vector3( 0, axis_length, 0 );
+				const y_axis_arrowHelper = new THREE.ArrowHelper( 	y_axis_arrow_dir, y_axis_arrow_origin, 
+																	axis_head_length, y_axis_color, 
+																	axis_head_length, axis_head_width);
+				main_coordinate_group.add( y_axis_arrowHelper );
+
+				// add z axis 
+				const z_axis_geometry = new THREE.CylinderGeometry( axis_radius, axis_radius, axis_length, 32 );
+				const z_axis_material = new THREE.MeshBasicMaterial( {color: 0x0000ff} );
+				const z_axis_cylinder = new THREE.Mesh( z_axis_geometry, z_axis_material );
+				z_axis_cylinder.rotation.x = Math.PI/2;
+				z_axis_cylinder.position.set(0, 0, 0.5*axis_length);
+				main_coordinate_group.add( z_axis_cylinder );
+
+				// add arrow in z axis end
+				const z_axis_arrow_dir = new THREE.Vector3( 0, 0, 1 );
+				z_axis_arrow_dir.normalize();
+				const z_axis_arrow_origin = new THREE.Vector3( 0, 0, axis_length );
+				const z_axis_arrowHelper = new THREE.ArrowHelper( 	z_axis_arrow_dir, z_axis_arrow_origin, 
+																	axis_head_length, z_axis_color, 
+																	axis_head_length, axis_head_width);
+				main_coordinate_group.add( z_axis_arrowHelper );
+
+				scene.add( main_coordinate_group );
+
+				// add another coordinate
+				// second_coordinate_group = main_coordinate_group;
+				second_coordinate_group = main_coordinate_group.clone();
+				second_coordinate_group.position.x = 10;
+				second_coordinate_group.position.y = 10;
+				second_coordinate_group.position.z = 10;
+
+				// const material = second_coordinate_group.children[0].material.clone();
+				// material.color.set(0x00ff0f);
+				// second_coordinate_group.children[0].material.set(material);
+				
+				// second_coordinate_group.children[0].material.color.set(0x00ffff);
+				// second_coordinate_group.children[0].position.set(20, 20, 20);
+				scene.add( second_coordinate_group );
+
+
 				// helper
-
-				scene.add( new THREE.AxesHelper( 20 ) );
-				scene.add( new THREE.GridHelper( 40, 40, 0x555555, 0x333333 ));
-
-				// textures
-
-				const loader = new THREE.TextureLoader();
-				const texture = loader.load( 'textures/disc.png' );
-
-				group = new THREE.Group();
-				scene.add( group );
-
-				// points
-
-				let dodecahedronGeometry = new THREE.DodecahedronGeometry( 5 );
-
-				// if normal and uv attributes are not removed, mergeVertices() can't consolidate indentical vertices with different normal/uv data
-
-				dodecahedronGeometry.deleteAttribute( 'normal' );
-				dodecahedronGeometry.deleteAttribute( 'uv' );
-
-				dodecahedronGeometry = BufferGeometryUtils.mergeVertices( dodecahedronGeometry );
-
-				const vertices = [];
-				const positionAttribute = dodecahedronGeometry.getAttribute( 'position' );
-
-				for ( let i = 0; i < positionAttribute.count; i ++ ) {
-
-					const vertex = new THREE.Vector3();
-					vertex.fromBufferAttribute( positionAttribute, i );
-					vertices.push( vertex );
-
-				}
-
-				const pointsMaterial = new THREE.PointsMaterial( {
-
-					color: 0x0080ff,
-					map: texture,
-					size: 1,
-					alphaTest: 0.5
-
-				} );
-
-				const pointsGeometry = new THREE.BufferGeometry().setFromPoints( vertices );
-
-				const points = new THREE.Points( pointsGeometry, pointsMaterial );
-				group.add( points );
-
-				// convex hull
-
-				const meshMaterial = new THREE.MeshLambertMaterial( {
-					color: 0xff00ff,
-					opacity: 0.5,
-					transparent: true
-				} );
-
-				const meshGeometry = new ConvexGeometry( vertices );
-
-				const mesh1 = new THREE.Mesh( meshGeometry, meshMaterial );
-				mesh1.material.side = THREE.BackSide; // back faces
-				mesh1.renderOrder = 0;
-				group.add( mesh1 );
-
-				const mesh2 = new THREE.Mesh( meshGeometry, meshMaterial.clone() );
-				mesh2.material.side = THREE.FrontSide; // front faces
-				mesh2.renderOrder = 1;
-				group.add( mesh2 );
+				// scene.add( new THREE.AxesHelper( 20 ) );
+				const grid = new THREE.GridHelper( 40, 40, 0x555555, 0x333333 );
+				grid.rotation.x = Math.PI/2;
+				scene.add( grid );
 
 				//
 
@@ -157,7 +182,7 @@
 
 				requestAnimationFrame( animate );
 
-				group.rotation.y += 0.005;
+				// main_coordinate_group.rotation.y += 0.005;
 
 				render();
 
