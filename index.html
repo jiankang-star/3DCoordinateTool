@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<title>three.js webgl - convex geometry</title>
+		<title>Coordinate3D</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 		<link type="text/css" rel="stylesheet" href="main.css">
@@ -9,6 +9,10 @@
 	<body>
 
 		<div id="info"> 3D COORDINATE TOOL - <a href="https://github.com/jiankang-star/3DCoordinateTool" target="_blank" rel="noopener">alex design</a> </div>
+
+		<form name="transform_data">
+			<input type="text", name="welcom", id="test01", value="">
+		</form>
 
 		<script src="./js/three.js"></script>
 		<script type="module">
@@ -19,6 +23,20 @@
 			import * as BufferGeometryUtils from 'https://cdn.skypack.dev/three@0.132.2/examples/jsm/utils/BufferGeometryUtils.js';
 
 			let coordinate1, coordinate2, camera, scene, renderer;
+
+			document.getElementById("test01").addEventListener("input", transform);
+
+			function transform() {
+				let input_string = document.transform_data.welcom.value;
+
+				const value = input_string.split(",").map(Number);
+
+				const quat = new THREE.Quaternion().fromArray(value);
+				
+				coordinate2.group.setRotationFromQuaternion( quat );
+				// coordinate2.group.position.set(-10, -10, -10);
+			}
+
 
 			class Coordinate3D extends THREE.Object3D {
 				constructor( origin = new THREE.Vector3( 0, 0, 0), axis_length = 20, axis_radius = 0.1, quaternion = new THREE.Quaternion(0, 0, 0, 1), 
