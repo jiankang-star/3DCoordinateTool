@@ -93,5 +93,24 @@ a, button, input, select {
 #test01 {
 	width:300px;
 	height:100px;
-	background-color:rgba(0, 0, 0, 0.74);
+	background-color: transparent;
+	border: 1px solid rgba( 255, 255, 255, 0.3 );
+  	border-radius: 0.5em;
+}
+
+.alive-wrapper {
+    position: absolute;
+	left: 1em;
+    /* bottom: 2em; */
+    /* width: 25em; */
+	height: 100%;
+	width: 30em;
+    left: 0%;
+	
+    /* margin-left: -12.5em; */
+    text-align: center;
+    padding: 1em;
+    background-color: rgba( 255, 255, 255, 0.15 );
+    border-radius: 0.5em;
+    border: 1px solid rgba( 255, 255, 255, 0.3 );
 }
