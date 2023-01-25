@@ -13,35 +13,83 @@
 		<form name="transform_data">
 			<!-- <input type="text", name="welcom", id="test01", value=""> -->
 			<div class="alive-wrapper">
-				<div>
-					INPUT
+
+				<!-- Tab links -->
+				<div class="tab">
+					<button type="button" class="tablinks" id="QuaternionButton" >Quaternion</button>
+					<button type="button" class="tablinks" id="MatrixButton" >Matrix</button>
+					<button type="button" class="tablinks" id="EulerButton" >Euler</button>
 				</div>
-				<input type="text", name="welcom", id="test01", value="">
+				
+				<!-- Tab content -->
+				<div id="Quaternion" class="tabcontent" style="display: none;">
+					<input type="text", class="input_box", name="quat_input", id="quat_id", value="">
+				</div>
+				
+				<div id="Matrix" class="tabcontent" style="display: none;">
+					<input type="text", class="input_box", name="matrix_input", id="matrix_id", value="">
+				</div>
+				
+				<div id="Euler" class="tabcontent" style="display: none;">
+					<input type="text", class="input_box", name="euler_input", id="euler_id", value="">
+				</div>
+
+
+				<!-- <input type="text", name="welcom", id="test01", value=""> -->
 			</div>
+
+
 
 		</form>
 
 		<script src="./js/three.js"></script>
 		<script type="module">
 
-			// import * as THREE from 'three';
 			import { OrbitControls } from "https://cdn.skypack.dev/three@0.132.2/examples/jsm/controls/OrbitControls.js";
 			import { ConvexGeometry } from "https://cdn.skypack.dev/three@0.132.2/examples/jsm/geometries/ConvexGeometry.js"
 			import * as BufferGeometryUtils from 'https://cdn.skypack.dev/three@0.132.2/examples/jsm/utils/BufferGeometryUtils.js';
 
 			let coordinate1, coordinate2, camera, scene, renderer;
 
-			document.getElementById("test01").addEventListener("input", transform);
+			document.getElementById("quat_id").addEventListener("input", function(evt){transform(evt);});	// test data: 0.25881905, 0., 0., 0.96592583
 
-			function transform() {
-				let input_string = document.transform_data.welcom.value;
+			function transform(evt) {
+				let input_string = evt.currentTarget.value;
+
+				console.log(input_string);
 
 				const value = input_string.split(",").map(Number);
 
 				const quat = new THREE.Quaternion().fromArray(value);
-				
+				console.log(quat);
 				coordinate2.group.setRotationFromQuaternion( quat );
 				// coordinate2.group.position.set(-10, -10, -10);
+			}
+
+			document.getElementById("QuaternionButton").addEventListener('click', function(event){openCity(event, "Quaternion")});
+			document.getElementById("MatrixButton").addEventListener('click', function(event){openCity(event, "Matrix")});
+			document.getElementById("EulerButton").addEventListener('click', function(event){openCity(event, "Euler")});
+
+			function openCity(evt, cityName) {
+
+				// 声明所有变量
+				var i, tabcontent, tablinks;
+
+				// 使用 class="tabcontent" 获取所有元素并隐藏它们
+				tabcontent = document.getElementsByClassName("tabcontent");
+				for (i = 0; i < tabcontent.length; i++) {
+					tabcontent[i].style.display = "none";
+				}
+
+				// 获取所有带有 class="tablinks" 的元素并删除类 "active"
+				tablinks = document.getElementsByClassName("tablinks");
+				for (i = 0; i < tablinks.length; i++) {
+					tablinks[i].className = tablinks[i].className.replace(" active", "");
+				}
+
+				// 显示当前选项卡，并添加"活动"选项卡 类到打开选项卡的按钮
+				document.getElementById(cityName).style.display = "block";
+				evt.currentTarget.className += " active";
 			}
 
 
@@ -140,14 +188,17 @@
 				let axis_head_length = 0.8;
 				let axis_head_width = 0.5;
 
-				coordinate1 = new Coordinate3D();
+				// coordinate1 = new Coordinate3D(origin = new THREE.Vector3( 0, 0, 0 ), axis_length = 10, axis_radius = 0.1, quaternion = new THREE.Quaternion(0, 0, 0, 1), 
+				// 			xAxisColor = 0xff0000, yAxisColor = 0x00ff00, zAxisColor = 0x0000ff);
+				coordinate1 = new Coordinate3D(origin = new THREE.Vector3( 0, 0, 0 ), axis_length = 10, axis_radius = 0.1, new THREE.Quaternion(0, 0, 0, 1), 
+							0x880000, 0x008800, 0x000088);
 				scene.add( coordinate1 );
 
-				coordinate2 = new Coordinate3D(origin = new THREE.Vector3( 5, 5, 5 ), axis_length = 10);
+				coordinate2 = new Coordinate3D(origin = new THREE.Vector3( 5, 5, 5 ), axis_length = 10, axis_radius = 0.1, new THREE.Quaternion(0.65028784,  0,  0, -0.75968791));
 				scene.add(coordinate2);
 
 				// helper
-				const grid = new THREE.GridHelper( 40, 40, 0x555555, 0x333333 );
+				const grid = new THREE.GridHelper( 160, 40, 0x555555, 0x333333 );
 				grid.rotation.x = Math.PI/2;
 				scene.add( grid );
 
