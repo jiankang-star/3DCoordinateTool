@@ -11,34 +11,29 @@
 		<div id="info"> 3D COORDINATE TOOL - <a href="https://github.com/jiankang-star/3DCoordinateTool" target="_blank" rel="noopener">alex design</a> </div>
 
 		<form name="transform_data">
-			<!-- <input type="text", name="welcom", id="test01", value=""> -->
-			<div class="alive-wrapper">
-
-				<!-- Tab links -->
+			<div class="input_erea">
 				<div class="tab">
 					<button type="button" class="tablinks" id="QuaternionButton" >Quaternion</button>
 					<button type="button" class="tablinks" id="MatrixButton" >Matrix</button>
 					<button type="button" class="tablinks" id="EulerButton" >Euler</button>
 				</div>
-				
-				<!-- Tab content -->
-				<div id="Quaternion" class="tabcontent" style="display: none;">
-					<input type="text", class="input_box", name="quat_input", id="quat_id", value="">
-				</div>
-				
-				<div id="Matrix" class="tabcontent" style="display: none;">
-					<input type="text", class="input_box", name="matrix_input", id="matrix_id", value="">
-				</div>
-				
-				<div id="Euler" class="tabcontent" style="display: none;">
-					<input type="text", class="input_box", name="euler_input", id="euler_id", value="">
+
+				<div class="content">
+					<input type="text" class="input_box" id="quat_input_id" value="" style="display: block;">
+					<input type="text" class="input_box" id="matrix_input_id" value="" style="display: none;">
+					<input type="text" class="input_box" id="euler_input_id" value="" style="display: none;">
 				</div>
 
+				<div class="output_content">
+					<h1>Quaternion</h1>
+					<p id="quaternion_data">w: -<br>x: -<br>y: -<br>z: -</p>
+					<h1>Matrix</h1>
+					<p id="matrix_data">-&emsp;&emsp;-&emsp;&emsp;-<br>-&emsp;&emsp;-&emsp;&emsp;-<br>-&emsp;&emsp;-&emsp;&emsp;-</p>
+					<h1>Euler</h1>
+					<p id="euler_data">x: -<br>y: -<br>z: -</p>
+				</div>
 
-				<!-- <input type="text", name="welcom", id="test01", value=""> -->
 			</div>
-
-
 
 		</form>
 
@@ -51,7 +46,10 @@
 
 			let coordinate1, coordinate2, camera, scene, renderer;
 
-			document.getElementById("quat_id").addEventListener("input", function(evt){transform(evt);});	// test data: 0.25881905, 0., 0., 0.96592583
+			document.getElementById("quat_input_id").addEventListener("input", function(evt){transform(evt);});	// test data: 0.25881905, 0., 0., 0.96592583
+			document.getElementById("matrix_input_id").addEventListener("input", function(evt){transform(evt);});
+			document.getElementById("euler_input_id").addEventListener("input", function(evt){transform(evt);});
+
 
 			function transform(evt) {
 				let input_string = evt.currentTarget.value;
@@ -64,21 +62,42 @@
 				console.log(quat);
 				coordinate2.group.setRotationFromQuaternion( quat );
 				// coordinate2.group.position.set(-10, -10, -10);
+
+				const quat_result = coordinate2.group.quaternion;
+				const mat_result = coordinate2.group.matrix;
+				const euler_result = coordinate2.group.rotation;
+				console.log(mat_result);
+				console.log(mat_result.elements)
+
+
+				document.getElementById("quaternion_data").innerHTML = 
+					"w : " + quat_result.w + "<br> x : " + quat_result.x + "<br> y : " + quat_result.y + "<br> z : " + quat_result.z;
+
+				document.getElementById("matrix_data").innerHTML = 
+				mat_result.elements[0] + "&emsp;" + mat_result.elements[1] + "&emsp;" + mat_result.elements[2] + "&emsp;" + mat_result.elements[3] +
+				"<br>" + mat_result.elements[4] + "&emsp;" + mat_result.elements[5] + "&emsp;" + mat_result.elements[6] + "&emsp;" + mat_result.elements[7] + 
+				"<br>" + mat_result.elements[8] + "&emsp;" + mat_result.elements[9] + "&emsp;" + mat_result.elements[10] + "&emsp;" + mat_result.elements[11] + 
+				"<br>" + mat_result.elements[12] + "&emsp;" + mat_result.elements[13] + "&emsp;" + mat_result.elements[14] + "&emsp;" + mat_result.elements[15];
+
+				document.getElementById("euler_data").innerHTML = 
+					" x : " + euler_result.x + "<br> y : " + euler_result.y + "<br> z : " + euler_result.z;
+
 			}
 
-			document.getElementById("QuaternionButton").addEventListener('click', function(event){openCity(event, "Quaternion")});
-			document.getElementById("MatrixButton").addEventListener('click', function(event){openCity(event, "Matrix")});
-			document.getElementById("EulerButton").addEventListener('click', function(event){openCity(event, "Euler")});
+			document.getElementById("QuaternionButton").addEventListener('click', function(event){openTransformTypeInputBox(event, "quat_input_id")});
+			document.getElementById("MatrixButton").addEventListener('click', function(event){openTransformTypeInputBox(event, "matrix_input_id")});
+			document.getElementById("EulerButton").addEventListener('click', function(event){openTransformTypeInputBox(event, "euler_input_id")});
 
-			function openCity(evt, cityName) {
+			function openTransformTypeInputBox(evt, transformType) {
 
 				// 声明所有变量
-				var i, tabcontent, tablinks;
+				var i, input_boxes, tablinks;
 
-				// 使用 class="tabcontent" 获取所有元素并隐藏它们
-				tabcontent = document.getElementsByClassName("tabcontent");
-				for (i = 0; i < tabcontent.length; i++) {
-					tabcontent[i].style.display = "none";
+				// 使用 class="input_box" 获取所有元素并隐藏它们
+				input_boxes = document.getElementsByClassName("input_box");
+
+				for (i = 0; i < input_boxes.length; i++) {
+					input_boxes[i].style.display = "none";
 				}
 
 				// 获取所有带有 class="tablinks" 的元素并删除类 "active"
@@ -88,9 +107,11 @@
 				}
 
 				// 显示当前选项卡，并添加"活动"选项卡 类到打开选项卡的按钮
-				document.getElementById(cityName).style.display = "block";
+				document.getElementById(transformType).style.display = "block";
 				evt.currentTarget.className += " active";
 			}
+
+			document.getElementById("QuaternionButton").click();
 
 
 			class Coordinate3D extends THREE.Object3D {
@@ -190,11 +211,11 @@
 
 				// coordinate1 = new Coordinate3D(origin = new THREE.Vector3( 0, 0, 0 ), axis_length = 10, axis_radius = 0.1, quaternion = new THREE.Quaternion(0, 0, 0, 1), 
 				// 			xAxisColor = 0xff0000, yAxisColor = 0x00ff00, zAxisColor = 0x0000ff);
-				coordinate1 = new Coordinate3D(origin = new THREE.Vector3( 0, 0, 0 ), axis_length = 10, axis_radius = 0.1, new THREE.Quaternion(0, 0, 0, 1), 
-							0x880000, 0x008800, 0x000088);
+				coordinate1 = new Coordinate3D(origin = new THREE.Vector3( 0, 0, 0 ), axis_length = 20, axis_radius = 0.05, new THREE.Quaternion(0, 0, 0, 1), 
+							0x990000, 0x009900, 0x000099);
 				scene.add( coordinate1 );
 
-				coordinate2 = new Coordinate3D(origin = new THREE.Vector3( 5, 5, 5 ), axis_length = 10, axis_radius = 0.1, new THREE.Quaternion(0.65028784,  0,  0, -0.75968791));
+				coordinate2 = new Coordinate3D(origin = new THREE.Vector3( 0, 0, 0 ), axis_length = 10, axis_radius = 0.1, new THREE.Quaternion(0.65028784,  0,  0, -0.75968791));
 				scene.add(coordinate2);
 
 				// helper
