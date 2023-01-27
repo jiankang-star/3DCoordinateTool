@@ -80,20 +80,23 @@ form .input_erea .tab {
 	display: inline-block;
 	width: 10em;
 	height: 10em;
-	border: 1px solid #ccc;
-	background-color: #f1f1f1;
+	/* border: 1px solid #ccc; */
+	border: 1px solid rgba( 255, 255, 255, 0.3 );
+	border-radius: 0.5em, 0em, 0em, 0.5em;
+	border-right: none;
+	/* background-color: #f1f1f1; */
   }
   
 /* 为用于打开选项卡内容的按钮设置样式 */
 form .input_erea .tab button {
 	width: 100%;
+	height: 33.33%;
 	display: block;
 	background-color: #888;
-	/* float: left; */
 	border: none;
 	outline: none;
 	cursor: pointer;
-	padding: 14px 16px;
+	padding: 0px;
 	transition: 0.3s;
 	font-weight: bold;
 	color:rgb(255, 255, 255);
@@ -115,6 +118,7 @@ form .input_erea .content {
 	top: 1em;
 	left: 11.2em;
 	width: 35em;
+	height: 10em;
 	/* border: 10px solid white; */
 	/* display: inline-block; */
 }
@@ -122,16 +126,38 @@ form .input_erea .content {
 /* 设置选项卡内容的样式 */
 form .input_erea .content .input_box {
 	display: block;
-	margin: 0;
-	padding: 6px 12px;
-	width: 20em;
-	height: 9em;
+	margin: 0px;
+	padding: 0px;
+	width: 22em;
+	height: 10em;
 	background-color: transparent;
-	border: 1px solid #ccc;
 	color:rgb(255, 255, 255);
 	border: 1px solid rgba( 255, 255, 255, 0.3 );
-	/* border-radius: 0.5em; */
+	font-size: 13px;
+	border-radius: 0em 0.5em 0.5em 0em;
 	border-left: none;
+}
+
+form .input_erea .content .input_box:focus {
+	display: block;
+	margin: 0px;
+	padding: 0px;
+	width: 22em;
+	height: 10em;
+	background-color: transparent;
+	color:rgb(255, 255, 255);
+	border: 1px solid rgba( 255, 255, 255, 0.3 );
+	font-size: 13px;
+	border-radius: 0em 0.5em 0.5em 0em;
+	border-left: none;
+}
+
+form .input_erea .content .input_box:-webkit-autofill,
+form .input_erea .content .input_box:-webkit-autofill:hover, 
+form .input_erea .content .input_box:-webkit-autofill:focus, 
+form .input_erea .content .input_box:-webkit-autofill:active {
+   transition: background-color 5000s ease-in-out 0s !important;
+   -webkit-text-fill-color: #ccc;
 }
 
 form .output_content {

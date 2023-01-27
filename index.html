@@ -9,7 +9,7 @@
 	</head>
 	<body>
 
-		<div id="info"> 3D COORDINATE TOOL - <a href="https://github.com/jiankang-star/3DCoordinateTool" target="_blank" rel="noopener">alex design</a> </div>
+		<!-- <div id="info"> 3D COORDINATE TOOL - <a href="https://github.com/jiankang-star/3DCoordinateTool" target="_blank" rel="noopener">alex design</a> </div> -->
 
 		<form name="transform_data">
 			<div class="input_erea">
@@ -47,41 +47,65 @@
 
 			let coordinate1, coordinate2, camera, scene, renderer;
 
-			document.getElementById("quat_input_id").addEventListener("input", function(evt){transform(evt);});	// test data: 0.25881905, 0., 0., 0.96592583
-			document.getElementById("matrix_input_id").addEventListener("input", function(evt){transform(evt);});
-			document.getElementById("euler_input_id").addEventListener("input", function(evt){transform(evt);});
+			document.getElementById("quat_input_id").addEventListener("input", function(evt){transform(evt, "quat");});	// test data: 0.25881905, 0., 0., 0.96592583
+			document.getElementById("matrix_input_id").addEventListener("input", function(evt){transform(evt, "matrix");});
+			document.getElementById("euler_input_id").addEventListener("input", function(evt){transform(evt, "euler");});
 
-
-			function transform(evt) {
-				let input_string = evt.currentTarget.value;
-
-				console.log(input_string);
-
-				const value = input_string.split(",").map(Number);
-
+			function transformFromQuaternion(inputString) {
+				const value = inputString.split(/[;,\s]+/).filter(element => element).map(Number);
 				const quat = new THREE.Quaternion().fromArray(value);
-				console.log(quat);
 				coordinate2.group.setRotationFromQuaternion( quat );
-				// coordinate2.group.position.set(-10, -10, -10);
+			}
 
+			function transformFromMatrix(inputString) {
+				const value = inputString.split(/[;,\s]+/).filter(element => element).map(Number);
+				const matrix = new THREE.Matrix4().fromArray(value);
+				coordinate2.group.setRotationFromMatrix(matrix);
+			}
+
+			function transformFromEuler(inputString) {
+				const value = inputString.split(/[\s,;]+/).filter(element => element).map(Number);
+				console.log(value);
+				let euler = new THREE.Euler().fromArray(value);
+				euler.reorder("XYZ");
+				console.log(euler);
+				coordinate2.group.quaternion.setFromEuler(euler);
+			}
+
+			function updateTransformData() {
 				const quat_result = coordinate2.group.quaternion;
-				const mat_result = coordinate2.group.matrix;
+				coordinate2.group.updateMatrix();
+				const mat_result = coordinate2.group.matrix.elements;
 				const euler_result = coordinate2.group.rotation;
 				console.log(mat_result);
-				console.log(mat_result.elements)
 
 
 				document.getElementById("quaternion_data").innerHTML = 
 					"w : " + quat_result.w + "<br> x : " + quat_result.x + "<br> y : " + quat_result.y + "<br> z : " + quat_result.z;
 
 				document.getElementById("matrix_data").innerHTML = 
-				mat_result.elements[0] + "&emsp;" + mat_result.elements[1] + "&emsp;" + mat_result.elements[2] + "&emsp;" + mat_result.elements[3] +
-				"<br>" + mat_result.elements[4] + "&emsp;" + mat_result.elements[5] + "&emsp;" + mat_result.elements[6] + "&emsp;" + mat_result.elements[7] + 
-				"<br>" + mat_result.elements[8] + "&emsp;" + mat_result.elements[9] + "&emsp;" + mat_result.elements[10] + "&emsp;" + mat_result.elements[11] + 
-				"<br>" + mat_result.elements[12] + "&emsp;" + mat_result.elements[13] + "&emsp;" + mat_result.elements[14] + "&emsp;" + mat_result.elements[15];
+					mat_result[0] + "&emsp;" + mat_result[1] + "&emsp;" + mat_result[2] + "&emsp;" + mat_result[3] +
+					"<br>" + mat_result[4] + "&emsp;" + mat_result[5] + "&emsp;" + mat_result[6] + "&emsp;" + mat_result[7] + 
+					"<br>" + mat_result[8] + "&emsp;" + mat_result[9] + "&emsp;" + mat_result[10] + "&emsp;" + mat_result[11] + 
+					"<br>" + mat_result[12] + "&emsp;" + mat_result[13] + "&emsp;" + mat_result[14] + "&emsp;" + mat_result[15];
 
 				document.getElementById("euler_data").innerHTML = 
 					" x : " + euler_result.x + "<br> y : " + euler_result.y + "<br> z : " + euler_result.z;
+			}
+
+			function transform(evt, rotationType) {
+				let inputString = evt.currentTarget.value;
+				console.log("rotationType = ", rotationType);	// debug
+				if (rotationType === "quat") {
+					transformFromQuaternion(inputString);
+				} else if (rotationType === "matrix") {
+					transformFromMatrix(inputString);
+				} else if (rotationType === "euler") {
+					transformFromEuler(inputString);
+				}
+
+				// coordinate2.group.position.set(-10, -10, -10);
+				updateTransformData();
 
 			}
 
