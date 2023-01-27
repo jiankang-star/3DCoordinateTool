@@ -20,9 +20,9 @@
 				</div>
 
 				<div class="content">
-					<input type="text" class="input_box" id="quat_input_id" value="" style="display: block;">
-					<input type="text" class="input_box" id="matrix_input_id" value="" style="display: none;">
-					<input type="text" class="input_box" id="euler_input_id" value="" style="display: none;">
+					<textarea class="input_box" id="quat_input_id" value="" style="display: block;"></textarea>
+					<textarea class="input_box" id="matrix_input_id" value="" style="display: none;"></textarea>
+					<textarea class="input_box" id="euler_input_id" value="" style="display: none;"></textarea>
 				</div>
 
 				<div class="output_content">
@@ -94,6 +94,7 @@
 			}
 
 			function transform(evt, rotationType) {
+				console.log("mark ***************** ");
 				let inputString = evt.currentTarget.value;
 				console.log("rotationType = ", rotationType);	// debug
 				if (rotationType === "quat") {
