@@ -24,16 +24,36 @@
 					<textarea class="input_box" id="matrix_input_id" value="" style="display: none;"></textarea>
 					<textarea class="input_box" id="euler_input_id" value="" style="display: none;"></textarea>
 				</div>
+			</div>
 
-				<div class="output_content">
-					<h1>Quaternion</h1>
-					<p id="quaternion_data">w: -<br>x: -<br>y: -<br>z: -</p>
-					<h1>Matrix</h1>
-					<p id="matrix_data">-&emsp;&emsp;-&emsp;&emsp;-<br>-&emsp;&emsp;-&emsp;&emsp;-<br>-&emsp;&emsp;-&emsp;&emsp;-</p>
-					<h1>Euler</h1>
-					<p id="euler_data">x: -<br>y: -<br>z: -</p>
-				</div>
+			<div class="output_erea">
+				<fieldset class="quaternion_data">
+					<legend>
+						Quaternion
+					</legend>
+					<div class="property">w:</div><div class="value" id="quat_w">1</div>
+					<div class="property">x:</div><div class="value" id="quat_x">0</div>
+					<div class="property">y:</div><div class="value" id="quat_y">0</div>
+					<div class="property">z:</div><div class="value" id="quat_z">0</div>
+				</fieldset>
 
+				<fieldset class="matrix_data">
+					<legend>
+						Matrix
+					</legend>
+					<div class="col0" id="m00">1</div><div class="col1" id="m01">0</div><div class="col2" id="m02">0</div>
+					<div class="col0" id="m10">0</div><div class="col1" id="m11">1</div><div class="col2" id="m12">0</div>
+					<div class="col0" id="m20">0</div><div class="col1" id="m21">0</div><div class="col2" id="m22">1</div>
+				</fieldset>
+
+				<fieldset class="euler_data">
+					<legend>
+						Euler
+					</legend>
+					<div class="property">x:</div><div class="value" id="euler_x">0</div>
+					<div class="property">y:</div><div class="value" id="euler_y">0</div>
+					<div class="property">z:</div><div class="value" id="euler_z">0</div>
+				</fieldset>
 			</div>
 
 		</form>
@@ -77,26 +97,40 @@
 				coordinate2.group.updateMatrix();
 				const mat_result = coordinate2.group.matrix.elements;
 				const euler_result = coordinate2.group.rotation;
-				console.log(mat_result);
 
+				function roundNumber(number, points) {
+					return Number.isInteger(number) ? number : number.toFixed(points)
+				}
 
-				document.getElementById("quaternion_data").innerHTML = 
-					"w : " + quat_result.w + "<br> x : " + quat_result.x + "<br> y : " + quat_result.y + "<br> z : " + quat_result.z;
+				document.getElementById("quat_w").innerHTML = roundNumber(quat_result.x, 7);
+				document.getElementById("quat_x").innerHTML = roundNumber(quat_result.x, 7);
+				document.getElementById("quat_y").innerHTML = roundNumber(quat_result.y, 7);
+				document.getElementById("quat_z").innerHTML = roundNumber(quat_result.z, 7);
 
-				document.getElementById("matrix_data").innerHTML = 
-					mat_result[0] + "&emsp;" + mat_result[1] + "&emsp;" + mat_result[2] + "&emsp;" + mat_result[3] +
-					"<br>" + mat_result[4] + "&emsp;" + mat_result[5] + "&emsp;" + mat_result[6] + "&emsp;" + mat_result[7] + 
-					"<br>" + mat_result[8] + "&emsp;" + mat_result[9] + "&emsp;" + mat_result[10] + "&emsp;" + mat_result[11] + 
-					"<br>" + mat_result[12] + "&emsp;" + mat_result[13] + "&emsp;" + mat_result[14] + "&emsp;" + mat_result[15];
+				document.getElementById("m00").innerHTML = roundNumber(mat_result[0], 7);
+				document.getElementById("m01").innerHTML = roundNumber(mat_result[1], 7);
+				document.getElementById("m02").innerHTML = roundNumber(mat_result[2], 7);
+				// document.getElementById("m03").innerHTML = roundNumber(mat_result[3], 7);
+				document.getElementById("m10").innerHTML = roundNumber(mat_result[4], 7);
+				document.getElementById("m11").innerHTML = roundNumber(mat_result[5], 7);
+				document.getElementById("m12").innerHTML = roundNumber(mat_result[6], 7);
+				// document.getElementById("m13").innerHTML = roundNumber(mat_result[7], 7);
+				document.getElementById("m20").innerHTML = roundNumber(mat_result[8], 7);
+				document.getElementById("m21").innerHTML = roundNumber(mat_result[9], 7);
+				document.getElementById("m22").innerHTML = roundNumber(mat_result[10], 7);
+				// document.getElementById("m23").innerHTML = roundNumber(mat_result[11], 7);
+				// document.getElementById("m30").innerHTML = roundNumber(mat_result[12], 7);
+				// document.getElementById("m31").innerHTML = roundNumber(mat_result[13], 7);
+				// document.getElementById("m32").innerHTML = roundNumber(mat_result[14], 7);
+				// document.getElementById("m33").innerHTML = roundNumber(mat_result[15], 7);
 
-				document.getElementById("euler_data").innerHTML = 
-					" x : " + euler_result.x + "<br> y : " + euler_result.y + "<br> z : " + euler_result.z;
+				document.getElementById("euler_x").innerHTML = roundNumber(euler_result.x, 7);
+				document.getElementById("euler_y").innerHTML = roundNumber(euler_result.y, 7);
+				document.getElementById("euler_z").innerHTML = roundNumber(euler_result.z, 7);
 			}
 
 			function transform(evt, rotationType) {
-				console.log("mark ***************** ");
 				let inputString = evt.currentTarget.value;
-				console.log("rotationType = ", rotationType);	// debug
 				if (rotationType === "quat") {
 					transformFromQuaternion(inputString);
 				} else if (rotationType === "matrix") {
