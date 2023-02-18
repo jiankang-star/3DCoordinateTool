@@ -72,6 +72,15 @@ form.transform_data {
 	box-sizing: border-box;
 }
 
+form .control_erea {
+	position: relative;
+	border: 1px solid #fff;
+	width: 30em;
+	height: 3em;
+	left: 1em;
+	margin: 0.5em 0em 1em 0em;
+}
+
 form .input_erea {
 	position: relative;
 	width: 30em;
