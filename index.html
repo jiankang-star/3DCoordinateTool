@@ -99,7 +99,7 @@
 				const euler_result = coordinate2.group.rotation;
 
 				function roundNumber(number, points) {
-					return Number.isInteger(number) ? number : number.toFixed(points)
+					return Number.isInteger(number) ? number : number?.toFixed(points);
 				}
 
 				document.getElementById("quat_w").innerHTML = roundNumber(quat_result.x, 7);

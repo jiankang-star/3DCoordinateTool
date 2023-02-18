@@ -58,14 +58,12 @@ a, button, input, select {
 
 form.transform_data {
 	position: absolute;
-	left: 1em;
 	margin: 0;
 	height: 100%;
 	overflow: hidden;
-	width: 32.5em;
+	width: 32em;
     left: 0%;
     text-align: center;
-    padding: 1em;
     background-color: rgba( 0, 0, 0, 0.3 );
     border-radius: 0em 0.5em 0.5em 0em;
     border-right: 1px solid rgba( 255, 255, 255, 0.3 );
@@ -74,33 +72,40 @@ form.transform_data {
 	box-sizing: border-box;
 }
 
+form .input_erea {
+	position: relative;
+	width: 30em;
+	height: 10em;
+	left: 1em;
+	padding: 0;
+	margin: 2em 0em;
+	box-sizing: content-box;
+}
 /* 为选项卡设置样式 */
 form .input_erea .tab {
-	position: absolute;
-	top: 1em;
-	left: 1em;
+	position: relative;
+	margin: 0;
 	overflow: hidden;
-	display: inline-block;
 	width: 8em;
-	height: 10em;
-	/* border: 1px solid #ccc; */
+	height: 100%;
 	border: 1px solid rgba( 255, 255, 255, 0.3 );
 	border-radius: 0.5em, 0em, 0em, 0.5em;
 	border-right: none;
-	/* background-color: #f1f1f1; */
-  }
+	box-sizing: border-box;
+	float: left;
+}
   
 /* 为用于打开选项卡内容的按钮设置样式 */
 form .input_erea .tab button {
 	width: 100%;
-	height: 33.33%;
+	height: 33.33333%;
 	display: block;
 	background-color: #888;
 	border: none;
 	outline: none;
 	cursor: pointer;
 	padding: 0px;
-	transition: 0.3s;
+	transition: 0s;
 	font-weight: bold;
 	color:rgb(255, 255, 255);
 	display: block;
@@ -116,23 +121,22 @@ form .input_erea .tab button.active {
 	background-color: #333;
 }
 
+/* 设置选项卡内容的样式 */
 form .input_erea .content {
-	position: absolute;
-	top: 1em;
-	left: 9em;
-	width: 35em;
-	height: 10em;
-	/* border: 10px solid white; */
-	/* display: inline-block; */
+	position: relative;
+	width: 22em;
+	height: 100%;
+	margin: 0;
+	box-sizing: border-box;
+	float: left;
 }
 
-/* 设置选项卡内容的样式 */
 form .input_erea .content .input_box {
 	display: block;
 	margin: 0px;
 	padding: 1em;
-	width: 20em;
-	height: 8em;
+	width: 100%;
+	height: 100%;
 	resize: none;
 	background-color: transparent;
 	color:rgb(255, 255, 255);
@@ -140,20 +144,20 @@ form .input_erea .content .input_box {
 	font-size: 13px;
 	border-radius: 0em 0.5em 0.5em 0em;
 	border-left: none;
+	box-sizing: border-box;
 }
 
 form .input_erea .content .input_box:focus {
 	display: block;
 	margin: 0px;
 	padding: 1em;
-	width: 20em;
-	height: 8em;
+	width: 100%;
+	height: 100%;
 	background-color: transparent;
 	color:rgb(255, 255, 255);
-	/* border: 1px solid rgba( 255, 255, 255, 0.3 ); */	/* meaningless settings */
 	font-size: 13px;
 	border-radius: 0em 0.5em 0.5em 0em;
-	border-left: none;
+	box-sizing: border-box;
 }
 
 form .input_erea .content .input_box:-webkit-autofill,
@@ -228,8 +232,6 @@ form .output_erea .matrix_data  div{
 }
 
 form .output_erea fieldset .property{
-	/* margin-right: 5px; */
-	/* width: 10px; */
 	width: 5%;
 	height: 33%;
 	display:inline-block;
@@ -240,7 +242,6 @@ form .output_erea fieldset .property{
 form .output_erea fieldset .value{
 	text-align:left;
 	padding-left:20px;
-	/* width: 100px; */
 	width: 95%;
 	height: 33%;
 	display:inline-block;
