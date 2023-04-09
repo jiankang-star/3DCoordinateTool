@@ -13,8 +13,8 @@
 
 		<form class="transform_data">
 			<div class="control_erea">
-				<button type="button" class="unit">degree</button>
-				<button type="button" class="reset">reset</button>
+				<button type="button" class="unit" id="unit_button_id">degree</button>
+				<button type="button" class="reset" id="reset_button_id">reset</button>
 			</div>
 			<div class="input_erea">
 				<div class="tab">
@@ -71,6 +71,23 @@
 
 			let coordinate1, coordinate2, camera, scene, renderer;
 
+			document.getElementById("unit_button_id").addEventListener("click", function(evt){updateUnit(evt);});
+			function updateUnit(evt) {
+				const unitButton = evt.target;
+				if (unitButton.innerText === "RAD") {
+					unitButton.innerText = "DEGREE";
+				} else {
+					unitButton.innerText = "RAD";
+				}
+
+				updateEulerContent(coordinate2.group.rotation);
+			}
+
+			document.getElementById("reset_button_id").addEventListener("click", function(evt){updateUnit(evt);});
+			function resetPage(evt) {
+
+			}
+
 			document.getElementById("quat_input_id").addEventListener("input", function(evt){transform(evt, "quat");});	// test data: 0.25881905, 0., 0., 0.96592583
 			document.getElementById("matrix_input_id").addEventListener("input", function(evt){transform(evt, "matrix");});
 			document.getElementById("euler_input_id").addEventListener("input", function(evt){transform(evt, "euler");});
@@ -96,41 +113,65 @@
 				coordinate2.group.quaternion.setFromEuler(euler);
 			}
 
+			function roundNumber(number, points) {
+					return Number.isInteger(number) ? number : number?.toFixed(points);
+			}
+
 			function updateTransformData() {
 				const quat_result = coordinate2.group.quaternion;
 				coordinate2.group.updateMatrix();
 				const mat_result = coordinate2.group.matrix.elements;
 				const euler_result = coordinate2.group.rotation;
 
-				function roundNumber(number, points) {
-					return Number.isInteger(number) ? number : number?.toFixed(points);
+				updateQuaternionContent(quat_result);
+
+				updateMatrixContent(mat_result);
+
+				updateEulerContent(euler_result);
+			}
+
+			function updateQuaternionContent(quaternionVaule) {
+				document.getElementById("quat_w").innerHTML = roundNumber(quaternionVaule.w, 7);
+				document.getElementById("quat_x").innerHTML = roundNumber(quaternionVaule.x, 7);
+				document.getElementById("quat_y").innerHTML = roundNumber(quaternionVaule.y, 7);
+				document.getElementById("quat_z").innerHTML = roundNumber(quaternionVaule.z, 7);
+			}
+
+			function updateMatrixContent(matrixValue) {
+				document.getElementById("m00").innerHTML = roundNumber(matrixValue[0], 7);
+				document.getElementById("m01").innerHTML = roundNumber(matrixValue[1], 7);
+				document.getElementById("m02").innerHTML = roundNumber(matrixValue[2], 7);
+				// document.getElementById("m03").innerHTML = roundNumber(matrixValue[3], 7);
+				document.getElementById("m10").innerHTML = roundNumber(matrixValue[4], 7);
+				document.getElementById("m11").innerHTML = roundNumber(matrixValue[5], 7);
+				document.getElementById("m12").innerHTML = roundNumber(matrixValue[6], 7);
+				// document.getElementById("m13").innerHTML = roundNumber(matrixValue[7], 7);
+				document.getElementById("m20").innerHTML = roundNumber(matrixValue[8], 7);
+				document.getElementById("m21").innerHTML = roundNumber(matrixValue[9], 7);
+				document.getElementById("m22").innerHTML = roundNumber(matrixValue[10], 7);
+				// document.getElementById("m23").innerHTML = roundNumber(matrixValue[11], 7);
+				// document.getElementById("m30").innerHTML = roundNumber(matrixValue[12], 7);
+				// document.getElementById("m31").innerHTML = roundNumber(matrixValue[13], 7);
+				// document.getElementById("m32").innerHTML = roundNumber(matrixValue[14], 7);
+				// document.getElementById("m33").innerHTML = roundNumber(matrixValue[15], 7);
+			}
+
+			function updateEulerContent(eulerValue) {
+				let x, y, z;
+				if (document.getElementById("unit_button_id").innerText == "DEGREE") {
+					x = eulerValue.x * (180 / Math.PI);
+					y = eulerValue.y * (180 / Math.PI);
+					z = eulerValue.z * (180 / Math.PI);
+				}
+				else {
+					x = eulerValue.x;
+					y = eulerValue.y;
+					z = eulerValue.z;
 				}
 
-				document.getElementById("quat_w").innerHTML = roundNumber(quat_result.x, 7);
-				document.getElementById("quat_x").innerHTML = roundNumber(quat_result.x, 7);
-				document.getElementById("quat_y").innerHTML = roundNumber(quat_result.y, 7);
-				document.getElementById("quat_z").innerHTML = roundNumber(quat_result.z, 7);
-
-				document.getElementById("m00").innerHTML = roundNumber(mat_result[0], 7);
-				document.getElementById("m01").innerHTML = roundNumber(mat_result[1], 7);
-				document.getElementById("m02").innerHTML = roundNumber(mat_result[2], 7);
-				// document.getElementById("m03").innerHTML = roundNumber(mat_result[3], 7);
-				document.getElementById("m10").innerHTML = roundNumber(mat_result[4], 7);
-				document.getElementById("m11").innerHTML = roundNumber(mat_result[5], 7);
-				document.getElementById("m12").innerHTML = roundNumber(mat_result[6], 7);
-				// document.getElementById("m13").innerHTML = roundNumber(mat_result[7], 7);
-				document.getElementById("m20").innerHTML = roundNumber(mat_result[8], 7);
-				document.getElementById("m21").innerHTML = roundNumber(mat_result[9], 7);
-				document.getElementById("m22").innerHTML = roundNumber(mat_result[10], 7);
-				// document.getElementById("m23").innerHTML = roundNumber(mat_result[11], 7);
-				// document.getElementById("m30").innerHTML = roundNumber(mat_result[12], 7);
-				// document.getElementById("m31").innerHTML = roundNumber(mat_result[13], 7);
-				// document.getElementById("m32").innerHTML = roundNumber(mat_result[14], 7);
-				// document.getElementById("m33").innerHTML = roundNumber(mat_result[15], 7);
-
-				document.getElementById("euler_x").innerHTML = roundNumber(euler_result.x, 7);
-				document.getElementById("euler_y").innerHTML = roundNumber(euler_result.y, 7);
-				document.getElementById("euler_z").innerHTML = roundNumber(euler_result.z, 7);
+				document.getElementById("euler_x").innerHTML = roundNumber(x, 7);
+				document.getElementById("euler_y").innerHTML = roundNumber(y, 7);
+				document.getElementById("euler_z").innerHTML = roundNumber(z, 7);
 			}
 
 			function transform(evt, rotationType) {
