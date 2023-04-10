@@ -223,12 +223,12 @@ form .input_erea .content .input_box:-webkit-autofill:active {
 form .output_erea {
 	display: block;
 	position: absolute;
-	top: 15em;
+	top: 16em;
 	left: 1em;
 	text-align: left;
 }
 
-form .output_erea h1 {
+/* form .output_erea h1 {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 15px;
 	color:#bbb;
@@ -238,7 +238,7 @@ form .output_erea p {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 15px;
 	color:#eee;
-}
+} */
 
 form .output_erea fieldset {
 	font-family: Arial, Helvetica, sans-serif;
@@ -264,6 +264,9 @@ form .output_erea .quaternion_data .property{
 	display:inline-block;
 	box-sizing:border-box;
 	text-align: left;
+	color:#999;
+	font-size: larger;
+	font-weight: bold;
 }
   
 form .output_erea .quaternion_data  .value{
@@ -273,6 +276,9 @@ form .output_erea .quaternion_data  .value{
 	height: 25%;
 	display:inline-block;
 	box-sizing:border-box;
+	color:#999;
+	font-size: larger;
+	font-weight: bold;
 }
 
 form .output_erea .matrix_data  div{
@@ -281,6 +287,9 @@ form .output_erea .matrix_data  div{
 	height: 33%;
 	display:inline-block;
 	box-sizing:border-box;
+	color:#999;
+	font-size: larger;
+	font-weight: bold;
 }
 
 form .output_erea fieldset .property{
@@ -289,6 +298,9 @@ form .output_erea fieldset .property{
 	display:inline-block;
 	box-sizing:border-box;
 	text-align:left;
+	color:#999;
+	font-size: larger;
+	font-weight: bold;
 }
   
 form .output_erea fieldset .value{
@@ -298,4 +310,7 @@ form .output_erea fieldset .value{
 	height: 33%;
 	display:inline-block;
 	box-sizing:border-box;
+	color:#999;
+	font-size: larger;
+	font-weight: bold;
 }
