@@ -83,9 +83,17 @@
 				updateEulerContent(coordinate2.group.rotation);
 			}
 
-			document.getElementById("reset_button_id").addEventListener("click", function(evt){updateUnit(evt);});
+			document.getElementById("reset_button_id").addEventListener("click", function(evt){resetPage(evt);});
 			function resetPage(evt) {
+				document.getElementById("quat_input_id").value = "0 0 0 1";
 
+				const quatInput = document.getElementById("quat_input_id");
+				const inputEvent = new InputEvent("input");
+				quatInput.dispatchEvent(inputEvent);
+
+				document.getElementById("quat_input_id").value = "";
+				document.getElementById("matrix_input_id").value = "";
+				document.getElementById("euler_input_id").value = "";
 			}
 
 			document.getElementById("quat_input_id").addEventListener("input", function(evt){transform(evt, "quat");});	// test data: 0.25881905, 0., 0., 0.96592583
